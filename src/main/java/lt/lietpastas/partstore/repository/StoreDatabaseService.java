@@ -1,9 +1,9 @@
-package lt.lietpastas.partstore.dbhelper;
+package lt.lietpastas.partstore.repository;
 
-import lt.lietpastas.partstore.PartDTO;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Repository
 public class DbLoader {
     private final String DATASOURCE = "partsData.csv";
     private final String PROVIDER_URL = "http://localhost:8085";

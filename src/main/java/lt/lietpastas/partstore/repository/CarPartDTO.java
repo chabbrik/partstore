@@ -1,4 +1,4 @@
-package lt.lietpastas.partstore;
+package lt.lietpastas.partstore.repository;
 
 import javax.persistence.*;
 
