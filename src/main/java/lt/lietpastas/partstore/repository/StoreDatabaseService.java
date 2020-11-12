@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Repository
-public class DbLoader {
+public class StoreDatabaseService {
     private final String DATASOURCE = "partsData.csv";
     private final String PROVIDER_URL = "http://localhost:8085";
     private final String FIRST_ROW_MARKER = "Pavadinimas";
-    private WebClient client;
+    private final WebClient client;
 
-    private void save(PartDTO part) {
+    private void save(CarPartDTO part) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -34,16 +34,24 @@ public class DbLoader {
         }
     }
 
-    public DbLoader() {
+    public StoreDatabaseService() {
         client = WebClient.create(PROVIDER_URL);
     }
 
+    public List<CarPartDTO> getInventoryList() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from CarPartDTO", CarPartDTO.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public void loadDBData() {
         Consumer<String> inserter = s -> {
-            PartDTO carPart = new PartDTO(s);
+            CarPartDTO carPart = new CarPartDTO(s);
 //            carPart.setKaina(getLatestPrice(carPart.getPrekesKodas()));
 //            carPart.setKiekis(getLatestCount(carPart.getPrekesKodas()));
-            System.out.println(carPart.toString());
+//            System.out.println(carPart.toString());
 //            save(carPart);
         };
 
@@ -77,4 +85,6 @@ public class DbLoader {
                 .bodyToMono(String.class)
                 .block();
     }
+
+
 }

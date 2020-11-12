@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "CarPart")
-public class PartDTO {
+public class CarPartDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -63,9 +63,9 @@ public class PartDTO {
     @Column(name = "adresas")
     private String adresas;
 
-    public PartDTO() { }
+    public CarPartDTO() { }
 
-    public PartDTO(String dbEntry) {
+    public CarPartDTO(String dbEntry) {
         String[] values = dbEntry.split(",(?=([^\"]|\"[^\"]*\")*$)");
 
         this.pavadinimas = values[0];
@@ -80,17 +80,17 @@ public class PartDTO {
         this.adresas = values[9];
     }
 
-    public PartDTO(int id,
-                   String pavadinimas,
-                   String marke,
-                   String metai,
-                   String galingumas,
-                   String turis,
-                   String degalai,
-                   String deze,
-                   String prekesKodas,
-                   String tiekejas,
-                   String adresas) {
+    public CarPartDTO(int id,
+                      String pavadinimas,
+                      String marke,
+                      String metai,
+                      String galingumas,
+                      String turis,
+                      String degalai,
+                      String deze,
+                      String prekesKodas,
+                      String tiekejas,
+                      String adresas) {
         this.id = id;
         this.pavadinimas = pavadinimas;
         this.marke = marke;
