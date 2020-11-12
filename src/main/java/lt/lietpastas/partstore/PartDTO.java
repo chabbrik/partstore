@@ -2,8 +2,6 @@ package lt.lietpastas.partstore;
 
 import javax.persistence.*;
 
-import static java.lang.Integer.parseInt;
-
 @Entity
 @Table(name = "CarPart")
 public class PartDTO {
@@ -11,6 +9,18 @@ public class PartDTO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+
+    // Kaina
+    @Column(name = "kaina")
+    private String kaina;
+
+    // Kiekis
+    @Column(name = "kiekis")
+    private String kiekis;
+
+    public void setKiekis(String kiekis) {
+        this.kiekis = kiekis;
+    }
 
     // Pavadinimas
     @Column(name = "pavadinimas")
@@ -20,9 +30,10 @@ public class PartDTO {
     @Column(name = "marke")
     private String marke;
 
-    // Metai - darom prielada, kad visada bus tik skaiciai
+    // Metai
+    // Specialiai naudoju String, nes kol kas nedarom jokių manipuliacijų.
     @Column(name = "metai")
-    private int metai;
+    private String metai;
 
     // Galingumas
     @Column(name = "galingumas")
@@ -52,12 +63,14 @@ public class PartDTO {
     @Column(name = "adresas")
     private String adresas;
 
+    public PartDTO() { }
+
     public PartDTO(String dbEntry) {
-        String[] values = dbEntry.split(",");
+        String[] values = dbEntry.split(",(?=([^\"]|\"[^\"]*\")*$)");
 
         this.pavadinimas = values[0];
         this.marke = values[1];
-        this.metai = parseInt(values[2], 10);
+        this.metai = values[2];
         this.galingumas = values[3];
         this.turis = values[4];
         this.degalai = values[5];
@@ -70,7 +83,7 @@ public class PartDTO {
     public PartDTO(int id,
                    String pavadinimas,
                    String marke,
-                   int metai,
+                   String metai,
                    String galingumas,
                    String turis,
                    String degalai,
@@ -115,11 +128,11 @@ public class PartDTO {
         this.marke = marke;
     }
 
-    public int getMetai() {
+    public String getMetai() {
         return metai;
     }
 
-    public void setMetai(int metai) {
+    public void setMetai(String metai) {
         this.metai = metai;
     }
 
@@ -179,9 +192,25 @@ public class PartDTO {
         this.adresas = adresas;
     }
 
+    public String getKaina() {
+        return kaina;
+    }
+
+    public void setKaina(String kaina) {
+        this.kaina = kaina;
+    }
+
+    public String getKiekis() {
+        return kiekis;
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
+        builder.append(kaina);
+        builder.append(", ");
+        builder.append(kiekis);
+        builder.append(", ");
         builder.append(pavadinimas);
         builder.append(", ");
         builder.append(marke);
