@@ -3,6 +3,7 @@ package lt.lietpastas.partstore.repository;
 import com.opencsv.bean.CsvBindByName;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "CarPart")
@@ -56,7 +57,7 @@ public class CarPartDTO {
     private int amount;
 
     @Column(name = "price")
-    private int price;
+    private BigDecimal price;
 
     public CarPartDTO() { }
 
@@ -83,7 +84,7 @@ public class CarPartDTO {
         builder.append(", ");
         builder.append(this.itemCode);
         builder.append(", ");
-        builder.append(this.supplierAddress);
+        builder.append(this.supplier);
         builder.append(", ");
         builder.append(this.supplierAddress);
 
@@ -98,11 +99,11 @@ public class CarPartDTO {
         this.id = id;
     }
 
-    public int getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -175,7 +176,7 @@ public class CarPartDTO {
     }
 
     public void setItemCode(String itemCode) {
-        this.itemCode = itemCode;
+        this.itemCode = itemCode.trim();
     }
 
     public String getSupplier() {
@@ -192,5 +193,24 @@ public class CarPartDTO {
 
     public void setSupplierAddress(String supplierAddress) {
         this.supplierAddress = supplierAddress;
+    }
+
+    public CarPartDTO clone() {
+        /* For some reason super.clone was throwing exceptions.
+        *  So I am making hand-made version.
+        *  itemCode, price and amount will be set individually.
+        */
+        CarPartDTO clone = new CarPartDTO();
+        clone.name = this.name;
+        clone.brand = this.brand;
+        clone.year = this.year;
+        clone.power = this.power;
+        clone.engineVolume = this.engineVolume;
+        clone.fuelType = this.fuelType;
+        clone.gearbox = this.gearbox;
+        clone.supplier = this.supplier;
+        clone.supplierAddress = this.supplierAddress;
+        return clone;
+
     }
 }
