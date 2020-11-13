@@ -8,14 +8,16 @@ import { CartComponent } from './cart/cart.component';
 import { PartHttpService } from './part-list/partHttpService';
 
 import { HttpClientModule } from '@angular/common/http';
-import {MatSortModule} from '@angular/material/sort';
-import {MatTableModule} from '@angular/material/table'
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
     AppComponent,
-    // PartListComponent,
+    PartListComponent,
     CartComponent
   ],
   imports: [
@@ -24,9 +26,15 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
     HttpClientModule,
     NoopAnimationsModule,
     MatTableModule,
-    MatSortModule
+    MatSortModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
-  providers: [PartHttpService],
+  providers: [
+      PartHttpService,
+      { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } }
+  ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

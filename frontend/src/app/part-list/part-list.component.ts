@@ -1,82 +1,57 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { PartHttpService } from './partHttpService';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+
+export interface CarPart {
+    id: number;
+    name: string;
+    power: string;
+    engineVolume: string;
+    gearbox: string;
+    fuelType: string;
+    itemCode: string;
+    brand: string;
+    year: string;
+    supplier: string;
+    supplierAddress: string;
+    amount: number;
+    price: number;
+}
 
 @Component({
-  selector: 'app-part-list',
-  templateUrl: './part-list.component.html',
-  styleUrls: ['./part-list.component.less']
+    selector: 'app-part-list',
+    templateUrl: './part-list.component.html',
+    styleUrls: ['./part-list.component.less']
 })
 
 export class PartListComponent implements OnInit {
-  error: any;
-  results: any;
+    displayedColumns: string[] = ['name', 'brand', 'year', 'price'];
+    dataSource: MatTableDataSource<CarPart>;
 
-  constructor(private partHttpService: PartHttpService) { }
+    @ViewChild(MatSort) sort: MatSort;
+    error: any;
+    results: any;
 
-  ngOnInit(): void {
-    this.getPartList();
-  }
+    constructor(private partHttpService: PartHttpService) {}
 
-  getPartList() {
-    this.partHttpService.getPartList()
-      .subscribe(
-        (data) => this.results = { ...data }, // success path
-        (error) => this.error = error // error path
-      );
-  }
+    ngOnInit() {
+        this.getPartList();
+    }
 
+    getPartList() {
+        this.partHttpService.getPartList()
+            .subscribe(
+                (data: CarPart[]) => {
+                    this.dataSource = new MatTableDataSource(data);
+                    this.dataSource.sort = this.sort;
+                    },
+                (error) => this.error = error
+            );
+    }
+
+    applyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
 }
-//
-//
-// @Component({
-//   selector: 'app-config',
-//   templateUrl: './config.component.html',
-//   providers: [ ConfigService ],
-//   styles: ['.error {color: red;}']
-// })
-// export class ConfigComponent {
-//   error: any;
-//   headers: string[];
-//   config: Config;
-//
-//   constructor(private configService: ConfigService) {}
-//
-//   clear() {
-//     this.config = undefined;
-//     this.error = undefined;
-//     this.headers = undefined;
-//   }
-//
-//
-//   showConfig_v1() {
-//     this.configService.getConfig_1()
-//       .subscribe((data: Config) => this.config = {
-//           heroesUrl: data.heroesUrl,
-//           textfile:  data.textfile
-//       });
-//   }
-//
-//   showConfig_v2() {
-//     this.configService.getConfig()
-//       // clone the data object, using its known Config shape
-//       .subscribe((data: Config) => this.config = { ...data });
-//   }
-//
-//   showConfigResponse() {
-//     this.configService.getConfigResponse()
-//       // resp is of type `HttpResponse<Config>`
-//       .subscribe(resp => {
-//         // display its headers
-//         const keys = resp.headers.keys();
-//         this.headers = keys.map(key =>
-//           `${key}: ${resp.headers.get(key)}`);
-//
-//         // access the body directly, which is typed as `Config`.
-//         this.config = { ... resp.body };
-//       });
-//   }
-//   makeError() {
-//     this.configService.makeIntentionalError().subscribe(null, error => this.error = error );
-//   }
-// }
-//

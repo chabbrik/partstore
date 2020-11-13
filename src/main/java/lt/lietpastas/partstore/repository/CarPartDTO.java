@@ -11,98 +11,94 @@ public class CarPartDTO {
     private int id;
 
     // Kaina
-    @Column(name = "kaina")
-    private String kaina;
+    @Column(name = "price")
+    private String price;
 
     // Kiekis
-    @Column(name = "kiekis")
-    private String kiekis;
-
-    public void setKiekis(String kiekis) {
-        this.kiekis = kiekis;
-    }
+    @Column(name = "amount")
+    private String amount;
 
     // Pavadinimas
-    @Column(name = "pavadinimas")
-    private String pavadinimas;
+    @Column(name = "name")
+    private String name;
 
     // Markė
-    @Column(name = "marke")
-    private String marke;
+    @Column(name = "brand")
+    private String brand;
 
     // Metai
     // Specialiai naudoju String, nes kol kas nedarom jokių manipuliacijų.
-    @Column(name = "metai")
-    private String metai;
+    @Column(name = "year")
+    private String year;
 
     // Galingumas
-    @Column(name = "galingumas")
-    private String galingumas;
+    @Column(name = "power")
+    private String power;
 
     // Variklio tūris
-    @Column(name = "turis")
-    private String turis;
+    @Column(name = "engineVolume")
+    private String engineVolume;
 
     // Degalų rūšis
-    @Column(name = "degalai")
-    private String degalai;
+    @Column(name = "fuelType")
+    private String fuelType;
 
     // Pavarų dėžė
-    @Column(name = "deze")
-    private String deze;
+    @Column(name = "gearbox")
+    private String gearbox;
 
     // Kodas
-    @Column(name = "prekesKodas")
-    private String prekesKodas;
+    @Column(name = "itemCode")
+    private String itemCode;
 
     // Tiekėjas
-    @Column(name = "tiekejas")
-    private String tiekejas;
+    @Column(name = "supplier")
+    private String supplier;
 
     // Tiekėjo adresas
-    @Column(name = "adresas")
-    private String adresas;
+    @Column(name = "supplierAddress")
+    private String supplierAddress;
 
     public CarPartDTO() { }
 
     public CarPartDTO(String dbEntry) {
         String[] values = dbEntry.split(",(?=([^\"]|\"[^\"]*\")*$)");
 
-        this.pavadinimas = values[0];
-        this.marke = values[1];
-        this.metai = values[2];
-        this.galingumas = values[3];
-        this.turis = values[4];
-        this.degalai = values[5];
-        this.deze = values[6];
-        this.prekesKodas = values[7];
-        this.tiekejas = values[8];
-        this.adresas = values[9];
+        this.name = values[0];
+        this.brand = values[1];
+        this.year = values[2];
+        this.power = values[3];
+        this.engineVolume = values[4];
+        this.fuelType = values[5];
+        this.gearbox = values[6];
+        this.itemCode = values[7];
+        this.supplier = values[8];
+        this.supplierAddress = values[9];
     }
 
-    public CarPartDTO(int id,
-                      String pavadinimas,
-                      String marke,
-                      String metai,
-                      String galingumas,
-                      String turis,
-                      String degalai,
-                      String deze,
-                      String prekesKodas,
-                      String tiekejas,
-                      String adresas) {
-        this.id = id;
-        this.pavadinimas = pavadinimas;
-        this.marke = marke;
-        this.metai = metai;
-        this.galingumas = galingumas;
-        this.turis = turis;
-        this.degalai = degalai;
-        this.deze = deze;
-        this.prekesKodas = prekesKodas;
-        this.tiekejas = tiekejas;
-        this.adresas = adresas;
-    }
+//    public CarPartDTO(int id,
+//                      String pavadinimas,
+//                      String marke,
+//                      String metai,
+//                      String galingumas,
+//                      String turis,
+//                      String degalai,
+//                      String deze,
+//                      String prekesKodas,
+//                      String tiekejas,
+//                      String adresas) {
+//        this.id = id;
+//        this.name = pavadinimas;
+//        this.brand = marke;
+//        this.year = metai;
+//        this.power = galingumas;
+//        this.engineVolume = turis;
+//        this.degalai = degalai;
+//        this.deze = deze;
+//        this.prekesKodas = prekesKodas;
+//        this.tiekejas = tiekejas;
+//        this.adresas = adresas;
+//    }
 
     public int getId() {
         return id;
@@ -112,125 +108,131 @@ public class CarPartDTO {
         this.id = id;
     }
 
-    public String getPavadinimas() {
-        return pavadinimas;
-    }
 
-    public void setPavadinimas(String pavadinimas) {
-        this.pavadinimas = pavadinimas;
-    }
-
-    public String getMarke() {
-        return marke;
-    }
-
-    public void setMarke(String marke) {
-        this.marke = marke;
-    }
-
-    public String getMetai() {
-        return metai;
-    }
-
-    public void setMetai(String metai) {
-        this.metai = metai;
-    }
-
-    public String getGalingumas() {
-        return galingumas;
-    }
-
-    public void setGalingumas(String galingumas) {
-        this.galingumas = galingumas;
-    }
-
-    public String getTuris() {
-        return turis;
-    }
-
-    public void setTuris(String turis) {
-        this.turis = turis;
-    }
-
-    public String getDegalai() {
-        return degalai;
-    }
-
-    public void setDegalai(String degalai) {
-        this.degalai = degalai;
-    }
-
-    public String getDeze() {
-        return deze;
-    }
-
-    public void setDeze(String deze) {
-        this.deze = deze;
-    }
-
-    public String getPrekesKodas() {
-        return prekesKodas;
-    }
-
-    public void setPrekesKodas(String prekesKodas) {
-        this.prekesKodas = prekesKodas;
-    }
-
-    public String getTiekejas() {
-        return tiekejas;
-    }
-
-    public void setTiekejas(String tiekejas) {
-        this.tiekejas = tiekejas;
-    }
-
-    public String getAdresas() {
-        return adresas;
-    }
-
-    public void setAdresas(String adresas) {
-        this.adresas = adresas;
-    }
-
-    public String getKaina() {
-        return kaina;
-    }
-
-    public void setKaina(String kaina) {
-        this.kaina = kaina;
-    }
-
-    public String getKiekis() {
-        return kiekis;
-    }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(kaina);
+        builder.append(this.price);
         builder.append(", ");
-        builder.append(kiekis);
+        builder.append(this.amount);
         builder.append(", ");
-        builder.append(pavadinimas);
+        builder.append(this.name);
         builder.append(", ");
-        builder.append(marke);
+        builder.append(this.brand);
         builder.append(", ");
-        builder.append(metai);
+        builder.append(this.year);
         builder.append(", ");
-        builder.append(galingumas);
+        builder.append(this.power);
         builder.append(", ");
-        builder.append(turis);
+        builder.append(this.engineVolume);
         builder.append(", ");
-        builder.append(deze);
+        builder.append(this.gearbox);
         builder.append(", ");
-        builder.append(degalai);
+        builder.append(this.fuelType);
         builder.append(", ");
-        builder.append(prekesKodas);
+        builder.append(this.itemCode);
         builder.append(", ");
-        builder.append(tiekejas);
+        builder.append(this.supplierAddress);
         builder.append(", ");
-        builder.append(adresas);
+        builder.append(this.supplierAddress);
 
         return builder.toString();
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getPower() {
+        return power;
+    }
+
+    public void setPower(String power) {
+        this.power = power;
+    }
+
+    public String getEngineVolume() {
+        return engineVolume;
+    }
+
+    public void setEngineVolume(String engineVolume) {
+        this.engineVolume = engineVolume;
+    }
+
+    public String getFuelType() {
+        return fuelType;
+    }
+
+    public void setFuelType(String fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    public String getGearbox() {
+        return gearbox;
+    }
+
+    public void setGearbox(String gearbox) {
+        this.gearbox = gearbox;
+    }
+
+    public String getItemCode() {
+        return itemCode;
+    }
+
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode;
+    }
+
+    public String getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
+    }
+
+    public String getSupplierAddress() {
+        return supplierAddress;
+    }
+
+    public void setSupplierAddress(String supplierAddress) {
+        this.supplierAddress = supplierAddress;
     }
 }
