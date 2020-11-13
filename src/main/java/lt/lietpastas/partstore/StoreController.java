@@ -2,14 +2,12 @@ package lt.lietpastas.partstore;
 
 import lt.lietpastas.partstore.repository.CarPartDTO;
 import lt.lietpastas.partstore.repository.StoreDatabaseService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class StoreController {
     private StoreDatabaseService storeDatabaseService;
 
@@ -19,7 +17,9 @@ public class StoreController {
 
     @GetMapping("/list")
     public List<CarPartDTO> getPartList() {
-        return storeDatabaseService.getInventoryList();
+        List<CarPartDTO> results = storeDatabaseService.getInventoryList();
+        results.forEach(s-> {System.out.println(s.toString());});
+        return results;
     }
 
     @PostMapping("cart/add/{id}")
