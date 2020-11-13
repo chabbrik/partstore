@@ -51,8 +51,7 @@ public class StoreDatabaseService {
             CarPartDTO carPart = new CarPartDTO(s);
 //            carPart.setKaina(getLatestPrice(carPart.getPrekesKodas()));
 //            carPart.setKiekis(getLatestCount(carPart.getPrekesKodas()));
-//            System.out.println(carPart.toString());
-//            save(carPart);
+            save(carPart);
         };
 
         try {
@@ -85,6 +84,4 @@ public class StoreDatabaseService {
                 .bodyToMono(String.class)
                 .block();
     }
-
-
 }
