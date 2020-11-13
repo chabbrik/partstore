@@ -1,12 +1,13 @@
 package lt.lietpastas.partstore.repository;
 
+import com.opencsv.bean.CsvToBeanBuilder;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -47,41 +48,59 @@ public class StoreDatabaseService {
         return null;
     }
     public void loadDBData() {
-        Consumer<String> inserter = s -> {
-            CarPartDTO carPart = new CarPartDTO(s);
-//            carPart.setKaina(getLatestPrice(carPart.getPrekesKodas()));
-//            carPart.setKiekis(getLatestCount(carPart.getPrekesKodas()));
-            save(carPart);
+        Consumer<CarPartDTO> inserter = carPartEntry -> {
+            System.out.println(carPartEntry.toString());
+
+            save(carPartEntry);
+
+//            String[] ids = carPartEntry.getItemCode().split(",");
+//
+//            for (String id : ids) {
+//                CarPartDTO carPart = new CarPartDTO(values);
+//                carPart.setItemCode(id);
+//                carPart.setPrice(getLatestPrice(carPart.getItemCode()));
+//                carPart.setAmount(getLatestCount(carPart.getItemCode()));
+//                save(carPart);
+//            }
         };
 
         try {
-            List<String> lines = Files.readAllLines(Paths.get(DATASOURCE), StandardCharsets.UTF_8);
-            lines
-                    .stream()
-                    .filter(x -> !x.contains(FIRST_ROW_MARKER))
-                    .forEach(inserter);
+            Reader reader = new InputStreamReader(new FileInputStream(DATASOURCE), "UTF-8");
+            List<CarPartDTO> beans = new CsvToBeanBuilder(reader)
+                    .withType(CarPartDTO.class).build().parse();
+            beans.forEach(inserter);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private String getLatestPrice(String itemId) {
+    private int getLatestPrice(String itemId) {
         String ITEM_URL = "/item/count/" + itemId;
-        return client.get()
-                .uri(ITEM_URL)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        try {
+            return client.get()
+                    .uri(ITEM_URL)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(Integer.class)
+                    .block();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
-    private String getLatestCount(String itemId) {
+    private int getLatestCount(String itemId) {
         String ITEM_URL = "/item/price/" + itemId;
-        return client.get()
-                .uri(ITEM_URL)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        try {
+            return client.get()
+                    .uri(ITEM_URL)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(Integer.class)
+                    .block();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

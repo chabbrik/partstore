@@ -1,5 +1,7 @@
 package lt.lietpastas.partstore.repository;
 
+import com.opencsv.bean.CsvBindByName;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,105 +12,53 @@ public class CarPartDTO {
     @Column(name = "id")
     private int id;
 
-    // Kaina
-    @Column(name = "price")
-    private String price;
-
-    // Kiekis
-    @Column(name = "amount")
-    private String amount;
-
-    // Pavadinimas
+    @CsvBindByName(column = "Pavadinimas")
     @Column(name = "name")
     private String name;
 
-    // Markė
+    @CsvBindByName(column = "Markė")
     @Column(name = "brand")
     private String brand;
 
-    // Metai
-    // Specialiai naudoju String, nes kol kas nedarom jokių manipuliacijų.
+    @CsvBindByName(column = "Metai")
     @Column(name = "year")
     private String year;
 
-    // Galingumas
+    @CsvBindByName(column = "Galingumas")
     @Column(name = "power")
     private String power;
 
-    // Variklio tūris
+    @CsvBindByName(column = "Variklio tūris")
     @Column(name = "engineVolume")
     private String engineVolume;
 
-    // Degalų rūšis
+    @CsvBindByName(column = "Degalų rūšis")
     @Column(name = "fuelType")
     private String fuelType;
 
-    // Pavarų dėžė
+    @CsvBindByName(column = "Pavarų dėžė")
     @Column(name = "gearbox")
     private String gearbox;
 
-    // Kodas
+    @CsvBindByName(column = "Kodas")
     @Column(name = "itemCode")
     private String itemCode;
 
-    // Tiekėjas
+    @CsvBindByName(column = "Tiekėjas")
     @Column(name = "supplier")
     private String supplier;
 
-    // Tiekėjo adresas
+    @CsvBindByName(column = "Tiekėjo adresas")
     @Column(name = "supplierAddress")
     private String supplierAddress;
 
+    @Column(name = "amount")
+    private int amount;
+
+    @Column(name = "price")
+    private int price;
+
     public CarPartDTO() { }
-
-    public CarPartDTO(String dbEntry) {
-        String[] values = dbEntry.split(",(?=([^\"]|\"[^\"]*\")*$)");
-
-        this.name = values[0];
-        this.brand = values[1];
-        this.year = values[2];
-        this.power = values[3];
-        this.engineVolume = values[4];
-        this.fuelType = values[5];
-        this.gearbox = values[6];
-        this.itemCode = values[7];
-        this.supplier = values[8];
-        this.supplierAddress = values[9];
-    }
-
-//    public CarPartDTO(int id,
-//                      String pavadinimas,
-//                      String marke,
-//                      String metai,
-//                      String galingumas,
-//                      String turis,
-//                      String degalai,
-//                      String deze,
-//                      String prekesKodas,
-//                      String tiekejas,
-//                      String adresas) {
-//        this.id = id;
-//        this.name = pavadinimas;
-//        this.brand = marke;
-//        this.year = metai;
-//        this.power = galingumas;
-//        this.engineVolume = turis;
-//        this.degalai = degalai;
-//        this.deze = deze;
-//        this.prekesKodas = prekesKodas;
-//        this.tiekejas = tiekejas;
-//        this.adresas = adresas;
-//    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-
 
     @Override
     public String toString() {
@@ -140,19 +90,27 @@ public class CarPartDTO {
         return builder.toString();
     }
 
-    public String getPrice() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public String getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
