@@ -1,8 +1,10 @@
 package lt.lietpastas.partstore.repository;
 
 import com.opencsv.bean.CsvToBeanBuilder;
+import lt.lietpastas.partstore.businessrules.BusinessService;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,13 +16,20 @@ import java.util.function.Consumer;
 
 @Repository
 public class StoreDatabaseService {
+
+    @Autowired
+    private HibernateUtil dbUtil;
+
+    @Autowired
+    private BusinessService businessService;
+
     private final String DATASOURCE = "partsData.csv";
     private final String PROVIDER_URL = "http://localhost:8085";
     private final WebClient client;
 
     private void save(CarPartDTO part) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = dbUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.save(part);
             transaction.commit();
@@ -37,7 +46,7 @@ public class StoreDatabaseService {
     }
 
     public List<CarPartDTO> getInventoryList() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = dbUtil.getSessionFactory().openSession()) {
             return session.createQuery("from CarPartDTO", CarPartDTO.class).list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,13 +64,13 @@ public class StoreDatabaseService {
                 BigDecimal price = getLatestPrice(carPartEntry.getItemCode());
                 for (String id : ids) {
                     CarPartDTO carPart = carPartEntry.clone();
-                    carPart.setItemCode(id);
-                    carPart.setPrice(price);
-                    carPart.setAmount(getLatestCount(carPart.getItemCode()));
+                    carPart.setAmountItemCode(id);
+                    carPart.setPrice(businessService.calculateFinalPrice(carPart.getBrand(), price));
+                    carPart.setAmount(getLatestCount(carPart.getAmountItemCode()));
                     save(carPart);
                 }
             } else {
-                carPartEntry.setPrice(getLatestPrice(carPartEntry.getItemCode()));
+                carPartEntry.setPrice(businessService.calculateFinalPrice(carPartEntry.getBrand(), getLatestPrice(carPartEntry.getItemCode())));
                 carPartEntry.setAmount(getLatestCount(carPartEntry.getItemCode()));
                 save(carPartEntry);
             }

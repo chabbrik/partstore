@@ -58,6 +58,8 @@ public class CarPartDTO {
 
     @Column(name = "price")
     private BigDecimal price;
+    private BigDecimal finalPrice;
+    private String amountItemCode;
 
     public CarPartDTO() { }
 
@@ -212,5 +214,24 @@ public class CarPartDTO {
         clone.supplierAddress = this.supplierAddress;
         return clone;
 
+    }
+
+    public void setFinalPrice(BigDecimal finalPrice) {
+        this.finalPrice = finalPrice;
+    }
+
+
+    public BigDecimal getFinalPrice() {
+        return finalPrice;
+    }
+
+    /* GOTCHD: I need a separate code to fetch number of parts */
+    /* GOTCHD: For some weird reason, ids to fetch amount and price are different */
+    public void setAmountItemCode(String amountItemCode) {
+        this.amountItemCode = amountItemCode;
+    }
+
+    public String getAmountItemCode() {
+        return amountItemCode;
     }
 }
