@@ -63,23 +63,27 @@ public class StoreDatabaseService {
                 Sometimes there are a few ids for a product.
                 Then price is set for all IDs, but amount is individual
              */
+            carPartEntry.setPrice(getLatestPrice(carPartEntry.getItemCode()));
+            carPartEntry.setFinalPrice(businessService.calculateFinalPrice(carPartEntry.getBrand(), carPartEntry.getPrice()));
             if (ids.length > 1) {
-                BigDecimal price = getLatestPrice(carPartEntry.getItemCode());
+
                 for (String id : ids) {
                     CarPartDTO carPart = carPartEntry.clone();
+                    carPart.setItemCode(carPartEntry.getItemCode());
+                    
+                    carPart.setPrice(carPartEntry.getPrice());
+                    carPart.setFinalPrice(businessService.calculateFinalPrice(carPart.getBrand(), carPartEntry.getPrice()));
+
                     carPart.setAmountItemCode(id);
-                    carPart.setFinalPrice(businessService.calculateFinalPrice(carPart.getBrand(), price));
                     carPart.setAmount(getLatestCount(carPart.getAmountItemCode()));
+
                     save(carPart);
                 }
             } else {
-                carPartEntry.setFinalPrice(businessService.calculateFinalPrice(carPartEntry.getBrand(), getLatestPrice(carPartEntry.getItemCode())));
+                carPartEntry.setAmountItemCode(carPartEntry.getItemCode());
                 carPartEntry.setAmount(getLatestCount(carPartEntry.getItemCode()));
                 save(carPartEntry);
             }
-
-
-
         };
 
         try {
