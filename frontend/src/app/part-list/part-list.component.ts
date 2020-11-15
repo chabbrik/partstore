@@ -19,6 +19,10 @@ export interface CarPart {
     price: number;
 }
 
+export class TableExpandableRowsExample {
+    columnsToDisplay = ['name', 'weight', 'symbol', 'position'];
+    expandedElement: CarPart | null;
+}
 @Component({
     selector: 'app-part-list',
     templateUrl: './part-list.component.html',
@@ -26,8 +30,18 @@ export interface CarPart {
 })
 
 export class PartListComponent implements OnInit {
-    displayedColumns: string[] = ['name', 'brand', 'year', 'price'];
+    displayedColumns: string[] = ['name', 'brand', 'year', 'finalPrice', 'amount', 'buyButton'];
+    title = {
+        name: 'Pavadinimas',
+        brand: 'Markė',
+        year: 'Metai',
+        finalPrice: 'Kaina',
+        amount: 'Kiekis',
+        buyButton: ''
+    };
+
     dataSource: MatTableDataSource<CarPart>;
+    cart = [];
 
     @ViewChild(MatSort) sort: MatSort;
     error: any;
@@ -49,6 +63,22 @@ export class PartListComponent implements OnInit {
                 (error) => this.error = error
             );
     }
+
+    addToCart(item) {
+        const priorPurchase = this.cart.filter(e => e.Name === item.id);
+
+        /* Strong assumption that there is at least one item for sale */
+        if (priorPurchase.length === 0) {
+            this.cart.push({ id: item.getId(), amount: 1 });
+        }
+        /* Strong assumption that there is only one element */
+        else if (priorPurchase.length === 1 && priorPurchase[0].amount < item.amount) {
+            priorPurchase[0].amount++;
+        }
+
+        this.partHttpService.sendCartItems(this.cart);
+    }
+
 
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;

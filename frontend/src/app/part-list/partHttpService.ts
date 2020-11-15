@@ -1,22 +1,31 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
-import { Observable, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+
+export interface cartItem {
+  id: number;
+  amount: number;
+}
 
 @Injectable()
 export class PartHttpService {
-  configUrl = 'http://localhost:8090/list';
+  listUrl = 'http://localhost:8090/list';
+  postUrl = 'http://localhost:8090/updatecart';
 
   constructor(private http: HttpClient) { }
 
   getPartList() {
-    return this.http.get(this.configUrl)
-      .pipe(
-        retry(3), // retry a failed request up to 3 times
-        catchError(this.handleError) // then handle the error
-      );
+    return this.http.get(this.listUrl);
+  }
+
+  sendCartItems(cartItems: cartItem[]) {
+    this.http.post<any>(this.postUrl, { cart: cartItems })
+        .subscribe(data => {
+      return data;
+    });
   }
 
   private handleError(error: HttpErrorResponse) {
