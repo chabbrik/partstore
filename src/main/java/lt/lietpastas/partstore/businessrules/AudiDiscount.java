@@ -8,7 +8,7 @@ import java.util.List;
 public class AudiDiscount implements Discount {
     @Override
     public BigDecimal calculateDiscount(List<CarPartDTO> cartItems) {
-        /* Calculating value of all parts in the cart*/
+        /* Calculating value of all parts in the cart */
         BigDecimal totalCartValue = cartItems
                 .stream()
                 .map(x -> x.getFinalPrice()

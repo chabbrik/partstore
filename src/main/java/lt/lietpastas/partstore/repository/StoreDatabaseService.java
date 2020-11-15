@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.util.Collections;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -24,10 +24,6 @@ public class StoreDatabaseService {
     @Autowired
     private BusinessService businessService;
 
-    private final String DATASOURCE = "partsData.csv";
-    private final String PROVIDER_URL = "http://localhost:8085";
-    public final String COUNT = "/item/count/";
-    public final String PRICE = "/item/price/";
     private final WebClient client;
 
     public void save(CarPartDTO part) {
@@ -45,6 +41,7 @@ public class StoreDatabaseService {
     }
 
     public StoreDatabaseService() {
+        String PROVIDER_URL = "http://localhost:8085";
         client = WebClient.create(PROVIDER_URL);
     }
 
@@ -70,7 +67,7 @@ public class StoreDatabaseService {
                 for (String id : ids) {
                     CarPartDTO carPart = carPartEntry.clone();
                     carPart.setItemCode(carPartEntry.getItemCode());
-                    
+
                     carPart.setPrice(carPartEntry.getPrice());
                     carPart.setFinalPrice(businessService.calculateFinalPrice(carPart.getBrand(), carPartEntry.getPrice()));
 
@@ -87,7 +84,8 @@ public class StoreDatabaseService {
         };
 
         try {
-            Reader reader = new InputStreamReader(new FileInputStream(DATASOURCE), "UTF-8");
+            String DATASOURCE = "partsData.csv";
+            Reader reader = new InputStreamReader(new FileInputStream(DATASOURCE), StandardCharsets.UTF_8);
             List<CarPartDTO> beans = new CsvToBeanBuilder(reader)
                     .withType(CarPartDTO.class).build().parse();
             beans.forEach(inserter);
