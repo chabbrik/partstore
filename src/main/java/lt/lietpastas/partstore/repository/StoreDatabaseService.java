@@ -2,7 +2,6 @@ package lt.lietpastas.partstore.repository;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 import lt.lietpastas.partstore.businessrules.BusinessService;
-import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -28,9 +26,11 @@ public class StoreDatabaseService {
 
     private final String DATASOURCE = "partsData.csv";
     private final String PROVIDER_URL = "http://localhost:8085";
+    public final String COUNT = "/item/count/";
+    public final String PRICE = "/item/price/";
     private final WebClient client;
 
-    private void save(CarPartDTO part) {
+    public void save(CarPartDTO part) {
         Transaction transaction = null;
         try (Session session = dbUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -92,7 +92,7 @@ public class StoreDatabaseService {
         }
     }
 
-    private BigDecimal getLatestPrice(String itemId) {
+    public BigDecimal getLatestPrice(String itemId) {
         String PRICE_URL = "/item/price/" + itemId;
         try {
             PriceDTO result = client.get()
@@ -110,21 +110,21 @@ public class StoreDatabaseService {
         return new BigDecimal(0);
     }
 
-    public List<CarPartDTO> getCartObjects(List<Integer> ids) {
-        List<CarPartDTO> list = null;
-        try (Session session = dbUtil.getSessionFactory().openSession()) {
-            list = new ArrayList<>(ids.size());
-            for (Integer id : ids)
-                list.add(session.load(CarPartDTO.class, id, LockOptions.NONE));
-            return list;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//    public List<CarPartDTO> getCartObjects(List<String> ids) {
+//        List<CarPartDTO> list = null;
+////        try (Session session = dbUtil.getSessionFactory().openSession()) {
+////            list = new ArrayList<>(ids.size());
+////            for (Integer id : ids)
+////                list.add(session.load(CarPartDTO.class, id, LockOptions.NONE));
+////            return list;
+////        } catch (Exception e) {
+////            e.printStackTrace();
+////        }
+//
+//        return Collections.emptyList();
+//    }
 
-        return Collections.emptyList();
-    }
-
-    private int getLatestCount(String itemId) {
+    public BigDecimal getLatestCount(String itemId) {
         String ITEM_URL = "/item/count/" + itemId;
         try {
             CountDTO result = client.get()
@@ -138,6 +138,6 @@ public class StoreDatabaseService {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return 0;
+        return BigDecimal.ZERO;
     }
 }

@@ -45,6 +45,10 @@ public class CarPartDTO {
     @Column(name = "itemCode")
     private String itemCode;
 
+    /* Saving this code to be able to extract amount from provider */
+    @Column(name = "amountItemCode")
+    private String amountItemCode;
+
     @CsvBindByName(column = "Tiekėjas")
     @Column(name = "supplier")
     private String supplier;
@@ -54,12 +58,16 @@ public class CarPartDTO {
     private String supplierAddress;
 
     @Column(name = "amount")
-    private int amount;
+    private BigDecimal amount;
 
     @Column(name = "price")
     private BigDecimal price;
+
+    /* After profit margin is applied */
+    @Column(name = "finalPrice")
     private BigDecimal finalPrice;
-    private String amountItemCode;
+
+
 
     public CarPartDTO() { }
 
@@ -109,11 +117,11 @@ public class CarPartDTO {
         this.price = price;
     }
 
-    public int getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

@@ -25,17 +25,9 @@ public class StoreController {
     public List<CarPartDTO> getPartList() {
         List<CarPartDTO> results  = storeDatabaseService.getInventoryList()
                 .stream()
-                .filter(x -> x.getAmount() > 0)
+                .filter(x -> x.getAmount().compareTo(BigDecimal.ZERO) > 0)
                 .collect(Collectors.toList());
 
-        // BMW nuolaida
-        BigDecimal BmwDiscount = results
-                .stream()
-                .filter(x -> x.getBrand().equals(BusinessService.BMW))
-                .reduce(new BigDecimal(0),
-                        (subtotal, carPart) ->
-                            subtotal.add(carPart.getFinalPrice().multiply(new BigDecimal("0.05")))
-                        );
         return results;
     }
 
@@ -43,7 +35,7 @@ public class StoreController {
     public String addToCart() {
         List<String> ids = new ArrayList<>();
 
-        List<CarPartDTO> cartItems = storeDatabaseService.getCartObjects(ids);
+//        List<CarPartDTO> cartItems = storeDatabaseService.getCartObjects(ids);
 
 
         return "Success";

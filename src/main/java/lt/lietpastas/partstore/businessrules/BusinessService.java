@@ -1,27 +1,18 @@
 package lt.lietpastas.partstore.businessrules;
 
+import org.springframework.beans.MutablePropertyValues;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
-public class BusinessService implements Discount {
+public class BusinessService {
     private final BigDecimal VW_MARGIN = new BigDecimal("1.225");
     private final BigDecimal AUDI_MARGIN = new BigDecimal("1.152");
     private final BigDecimal BMW_MARGIN = new BigDecimal("1.17");
     public static final String BMW = "BMW";
     public static final String AUDI = "Audi";
     public static final String VW = "Volkswagen";
-
-    @Override
-    public BigDecimal calculateCartValue() {
-        return null;
-    }
-
-    @Override
-    public BigDecimal calculateDiscount() {
-        return null;
-    }
 
     public BigDecimal calculateFinalPrice(String brand, BigDecimal part) {
 
