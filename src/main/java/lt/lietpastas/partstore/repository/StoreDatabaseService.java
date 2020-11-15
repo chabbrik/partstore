@@ -2,6 +2,7 @@ package lt.lietpastas.partstore.repository;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 import lt.lietpastas.partstore.businessrules.BusinessService;
+import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -65,12 +68,12 @@ public class StoreDatabaseService {
                 for (String id : ids) {
                     CarPartDTO carPart = carPartEntry.clone();
                     carPart.setAmountItemCode(id);
-                    carPart.setPrice(businessService.calculateFinalPrice(carPart.getBrand(), price));
+                    carPart.setFinalPrice(businessService.calculateFinalPrice(carPart.getBrand(), price));
                     carPart.setAmount(getLatestCount(carPart.getAmountItemCode()));
                     save(carPart);
                 }
             } else {
-                carPartEntry.setPrice(businessService.calculateFinalPrice(carPartEntry.getBrand(), getLatestPrice(carPartEntry.getItemCode())));
+                carPartEntry.setFinalPrice(businessService.calculateFinalPrice(carPartEntry.getBrand(), getLatestPrice(carPartEntry.getItemCode())));
                 carPartEntry.setAmount(getLatestCount(carPartEntry.getItemCode()));
                 save(carPartEntry);
             }
@@ -105,6 +108,20 @@ public class StoreDatabaseService {
             System.out.println(e.getMessage());
         }
         return new BigDecimal(0);
+    }
+
+    public List<CarPartDTO> getCartObjects(List<Integer> ids) {
+        List<CarPartDTO> list = null;
+        try (Session session = dbUtil.getSessionFactory().openSession()) {
+            list = new ArrayList<>(ids.size());
+            for (Integer id : ids)
+                list.add(session.load(CarPartDTO.class, id, LockOptions.NONE));
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return Collections.emptyList();
     }
 
     private int getLatestCount(String itemId) {
