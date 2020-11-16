@@ -19,10 +19,6 @@ export interface CarPart {
     price: number;
 }
 
-export class TableExpandableRowsExample {
-    columnsToDisplay = ['name', 'weight', 'symbol', 'position'];
-    expandedElement: CarPart | null;
-}
 @Component({
     selector: 'app-part-list',
     templateUrl: './part-list.component.html',
@@ -37,15 +33,25 @@ export class PartListComponent implements OnInit {
         year: 'Metai',
         finalPrice: 'Kaina',
         amount: 'Kiekis',
-        buyButton: ''
+        buyButton: 'Pirkti'
     };
 
     dataSource: MatTableDataSource<CarPart>;
+    originalData;
     cart = [];
+
+    toggles = {
+        BMW: true,
+        Audi: true,
+        VW: true
+    };
 
     @ViewChild(MatSort) sort: MatSort;
     error: any;
     results: any;
+    private Bmwparts: CarPart[];
+    private AudiParts: CarPart[];
+    private VWparts: CarPart[];
 
     constructor(private partHttpService: PartHttpService) {}
 
@@ -53,13 +59,39 @@ export class PartListComponent implements OnInit {
         this.getPartList();
     }
 
+    toggle(brand: string) {
+        this.toggles[brand] = !this.toggles[brand];
+        let datasrc = [];
+
+        if (this.toggles.BMW) {
+            datasrc = datasrc.concat(this.Bmwparts);
+        }
+
+        if (this.toggles.Audi) {
+            datasrc = datasrc.concat(this.AudiParts);
+        }
+
+        if (this.toggles.VW) {
+            datasrc = datasrc.concat(this.VWparts);
+        }
+
+        this.dataSource = new MatTableDataSource(datasrc);
+        this.dataSource.sort = this.sort;
+    }
+
     getPartList() {
         this.partHttpService.getPartList()
             .subscribe(
                 (data: CarPart[]) => {
+                    this.originalData = data;
+
+                    this.Bmwparts = data.filter(x => x.brand === 'BMW');
+                    this.AudiParts = data.filter(x => x.brand === 'Audi');
+                    this.VWparts = data.filter(x => x.brand === 'VW');
+
                     this.dataSource = new MatTableDataSource(data);
                     this.dataSource.sort = this.sort;
-                    },
+                },
                 (error) => this.error = error
             );
     }
@@ -69,7 +101,7 @@ export class PartListComponent implements OnInit {
 
         /* Strong assumption that there is at least one item for sale */
         if (priorPurchase.length === 0) {
-            this.cart.push({ id: item.getId(), amount: 1 });
+            this.cart.push({ id: item.id, amount: 1 });
         }
         /* Strong assumption that there is only one element */
         else if (priorPurchase.length === 1 && priorPurchase[0].amount < item.amount) {
