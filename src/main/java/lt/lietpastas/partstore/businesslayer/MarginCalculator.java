@@ -1,12 +1,11 @@
-package lt.lietpastas.partstore.businessrules;
+package lt.lietpastas.partstore.businesslayer;
 
-import org.springframework.beans.MutablePropertyValues;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
-public class BusinessService {
+public class MarginCalculator {
     private final BigDecimal VW_MARGIN = new BigDecimal("1.225");
     private final BigDecimal AUDI_MARGIN = new BigDecimal("1.152");
     private final BigDecimal BMW_MARGIN = new BigDecimal("1.17");

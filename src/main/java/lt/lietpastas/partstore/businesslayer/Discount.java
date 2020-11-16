@@ -1,7 +1,6 @@
-package lt.lietpastas.partstore.businessrules;
+package lt.lietpastas.partstore.businesslayer;
 
-import lt.lietpastas.partstore.repository.CarPartDTO;
-import org.springframework.beans.MutablePropertyValues;
+import lt.lietpastas.partstore.dblayer.CarPartDTO;
 
 import java.math.BigDecimal;
 import java.util.List;

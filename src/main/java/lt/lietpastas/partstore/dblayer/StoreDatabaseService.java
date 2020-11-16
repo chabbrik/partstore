@@ -1,7 +1,10 @@
-package lt.lietpastas.partstore.repository;
+package lt.lietpastas.partstore.dblayer;
 
 import com.opencsv.bean.CsvToBeanBuilder;
-import lt.lietpastas.partstore.businessrules.BusinessService;
+import lt.lietpastas.partstore.CartItem;
+import lt.lietpastas.partstore.CartModel;
+import lt.lietpastas.partstore.businesslayer.MarginCalculator;
+import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.io.*;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -22,7 +26,7 @@ public class StoreDatabaseService {
     private HibernateUtil dbUtil;
 
     @Autowired
-    private BusinessService businessService;
+    private MarginCalculator marginCalculator;
 
     private final WebClient client;
 
@@ -61,7 +65,7 @@ public class StoreDatabaseService {
                 Then price is set for all IDs, but amount is individual
              */
             carPartEntry.setPrice(getLatestPrice(carPartEntry.getItemCode()));
-            carPartEntry.setFinalPrice(businessService.calculateFinalPrice(carPartEntry.getBrand(), carPartEntry.getPrice()));
+            carPartEntry.setFinalPrice(marginCalculator.calculateFinalPrice(carPartEntry.getBrand(), carPartEntry.getPrice()));
             if (ids.length > 1) {
 
                 for (String id : ids) {
@@ -69,7 +73,7 @@ public class StoreDatabaseService {
                     carPart.setItemCode(carPartEntry.getItemCode());
 
                     carPart.setPrice(carPartEntry.getPrice());
-                    carPart.setFinalPrice(businessService.calculateFinalPrice(carPart.getBrand(), carPartEntry.getPrice()));
+                    carPart.setFinalPrice(marginCalculator.calculateFinalPrice(carPart.getBrand(), carPartEntry.getPrice()));
 
                     carPart.setAmountItemCode(id);
                     carPart.setAmount(getLatestCount(carPart.getAmountItemCode()));

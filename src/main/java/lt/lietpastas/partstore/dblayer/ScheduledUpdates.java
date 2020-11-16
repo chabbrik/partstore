@@ -1,6 +1,6 @@
-package lt.lietpastas.partstore.repository;
+package lt.lietpastas.partstore.dblayer;
 
-import lt.lietpastas.partstore.businessrules.BusinessService;
+import lt.lietpastas.partstore.businesslayer.MarginCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ public class ScheduledUpdates {
     private StoreDatabaseService storeDatabaseService;
 
     @Autowired
-    private BusinessService businessService;
+    private MarginCalculator marginCalculator;
 
     @Scheduled(cron = "0 0 1/4 ? * *")
     public void updateProductDatabase() {

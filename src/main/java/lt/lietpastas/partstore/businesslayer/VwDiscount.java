@@ -1,6 +1,6 @@
-package lt.lietpastas.partstore.businessrules;
+package lt.lietpastas.partstore.businesslayer;
 
-import lt.lietpastas.partstore.repository.CarPartDTO;
+import lt.lietpastas.partstore.dblayer.CarPartDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -11,7 +11,7 @@ public class VwDiscount implements Discount {
     public BigDecimal calculateDiscount(List<CarPartDTO> cartItems) {
         List<BigDecimal> vwCartItemValues = cartItems
                 .stream()
-                .filter(x -> x.getBrand().equals(BusinessService.VW))
+                .filter(x -> x.getBrand().equals(MarginCalculator.VW))
                 .map(x -> x.getFinalPrice()
                         .multiply(x.getAmount()))
                 .collect(Collectors.toList());

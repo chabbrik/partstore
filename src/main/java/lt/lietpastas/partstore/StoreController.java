@@ -1,8 +1,8 @@
 package lt.lietpastas.partstore;
 
-import lt.lietpastas.partstore.businessrules.BusinessService;
-import lt.lietpastas.partstore.repository.CarPartDTO;
-import lt.lietpastas.partstore.repository.StoreDatabaseService;
+import lt.lietpastas.partstore.businesslayer.MarginCalculator;
+import lt.lietpastas.partstore.dblayer.CarPartDTO;
+import lt.lietpastas.partstore.dblayer.StoreDatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +19,7 @@ public class StoreController {
     private StoreDatabaseService storeDatabaseService;
 
     @Autowired
-    private BusinessService businessService;
+    private MarginCalculator marginCalculator;
 
     @GetMapping("/list")
     public List<CarPartDTO> getPartList() {
@@ -31,11 +31,10 @@ public class StoreController {
         return results;
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(path = "cart/updatecart", consumes = "application/json", produces = "application/json")
-    public String addToCart() {
-        List<String> ids = new ArrayList<>();
-
-//        List<CarPartDTO> cartItems = storeDatabaseService.getCartObjects(ids);
+    public String addToCart(@RequestBody CartModel cartModel) {
+        List<CarPartDTO> cartItems = storeDatabaseService.getCartObjects(cartModel);
 
 
         return "Success";

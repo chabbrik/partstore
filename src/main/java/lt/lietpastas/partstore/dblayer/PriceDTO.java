@@ -1,4 +1,4 @@
-package lt.lietpastas.partstore.repository;
+package lt.lietpastas.partstore.dblayer;
 
 import java.math.BigDecimal;
 

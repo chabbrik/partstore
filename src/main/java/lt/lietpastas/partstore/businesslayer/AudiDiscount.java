@@ -1,6 +1,6 @@
-package lt.lietpastas.partstore.businessrules;
+package lt.lietpastas.partstore.businesslayer;
 
-import lt.lietpastas.partstore.repository.CarPartDTO;
+import lt.lietpastas.partstore.dblayer.CarPartDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,7 +18,7 @@ public class AudiDiscount implements Discount {
         if (totalCartValue.compareTo(new BigDecimal(AUDI_THRESHOLD)) >= 0) {
             BigDecimal AudiPartValue = cartItems
                     .stream()
-                    .filter(x -> x.getBrand().equals(BusinessService.AUDI))
+                    .filter(x -> x.getBrand().equals(MarginCalculator.AUDI))
                     .map(x -> x.getFinalPrice()
                             .multiply(x.getAmount()))
                     .reduce(BigDecimal.ZERO, BigDecimal::add);

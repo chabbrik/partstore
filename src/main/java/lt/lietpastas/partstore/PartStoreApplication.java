@@ -1,6 +1,6 @@
 package lt.lietpastas.partstore;
 
-import lt.lietpastas.partstore.repository.StoreDatabaseService;
+import lt.lietpastas.partstore.dblayer.StoreDatabaseService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
