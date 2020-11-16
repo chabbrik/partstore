@@ -34,7 +34,7 @@ public class StoreDatabaseService {
         Transaction transaction = null;
         try (Session session = dbUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.save(part);
+            session.saveOrUpdate(part);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -116,19 +116,18 @@ public class StoreDatabaseService {
         return new BigDecimal(0);
     }
 
-//    public List<CarPartDTO> getCartObjects(List<String> ids) {
-//        List<CarPartDTO> list = null;
-////        try (Session session = dbUtil.getSessionFactory().openSession()) {
-////            list = new ArrayList<>(ids.size());
-////            for (Integer id : ids)
-////                list.add(session.load(CarPartDTO.class, id, LockOptions.NONE));
-////            return list;
-////        } catch (Exception e) {
-////            e.printStackTrace();
-////        }
-//
-//        return Collections.emptyList();
-//    }
+    public List<CarPartDTO> getCartObjects(CartModel cart) {
+        List<CarPartDTO> list = new ArrayList<>(cart.getCartItems().length);
+        try (Session session = dbUtil.getSessionFactory().openSession()) {
+            for (CartItem item : cart.getCartItems())
+                list.add(session.load(CarPartDTO.class, item.getId(), LockOptions.NONE));
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 
     public BigDecimal getLatestCount(String itemId) {
         String ITEM_URL = "/item/count/" + itemId;

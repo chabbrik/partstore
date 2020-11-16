@@ -25,7 +25,7 @@ public class ScheduledUpdates {
 
             BigDecimal newPrice = (storeDatabaseService.getLatestPrice(part.getItemCode()));
             part.setPrice(newPrice);
-            part.setFinalPrice(businessService.calculateFinalPrice(part.getBrand(), newPrice));
+            part.setFinalPrice(marginCalculator.calculateFinalPrice(part.getBrand(), newPrice));
 
             storeDatabaseService.save(part);
         }
