@@ -87,7 +87,7 @@ export class PartListComponent implements OnInit {
 
                     this.Bmwparts = data.filter(x => x.brand === 'BMW');
                     this.AudiParts = data.filter(x => x.brand === 'Audi');
-                    this.VWparts = data.filter(x => x.brand === 'VW');
+                    this.VWparts = data.filter(x => x.brand === 'Volkswagen');
 
                     this.dataSource = new MatTableDataSource(data);
                     this.dataSource.sort = this.sort;
