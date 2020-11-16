@@ -11,7 +11,7 @@ export interface cartItem {
 }
 
 @Injectable()
-export class PartHttpService {
+export class HttpService {
   listUrl = 'http://localhost:8090/list';
   postUrl = 'http://localhost:8090/updatecart';
 

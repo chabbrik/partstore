@@ -1,23 +1,9 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-import { PartHttpService } from './partHttpService';
+import { HttpService } from '../services/http.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
-export interface CarPart {
-    id: number;
-    name: string;
-    power: string;
-    engineVolume: string;
-    gearbox: string;
-    fuelType: string;
-    itemCode: string;
-    brand: string;
-    year: string;
-    supplier: string;
-    supplierAddress: string;
-    amount: number;
-    price: number;
-}
+import { CarPart, CartService } from '../services/data.service';
+import { BRAND } from '../constants/car.brands';
 
 @Component({
     selector: 'app-part-list',
@@ -38,7 +24,6 @@ export class PartListComponent implements OnInit {
 
     dataSource: MatTableDataSource<CarPart>;
     originalData;
-    cart = [];
 
     toggles = {
         BMW: true,
@@ -49,11 +34,13 @@ export class PartListComponent implements OnInit {
     @ViewChild(MatSort) sort: MatSort;
     error: any;
     results: any;
-    private Bmwparts: CarPart[];
-    private AudiParts: CarPart[];
-    private VWparts: CarPart[];
 
-    constructor(private partHttpService: PartHttpService) {}
+    private bwmParts: CarPart[];
+    private audiParts: CarPart[];
+    private vwParts: CarPart[];
+
+    constructor(private partHttpService: HttpService,
+                private dataService: CartService) {}
 
     ngOnInit() {
         this.getPartList();
@@ -64,15 +51,15 @@ export class PartListComponent implements OnInit {
         let datasrc = [];
 
         if (this.toggles.BMW) {
-            datasrc = datasrc.concat(this.Bmwparts);
+            datasrc = datasrc.concat(this.bwmParts);
         }
 
         if (this.toggles.Audi) {
-            datasrc = datasrc.concat(this.AudiParts);
+            datasrc = datasrc.concat(this.audiParts);
         }
 
         if (this.toggles.VW) {
-            datasrc = datasrc.concat(this.VWparts);
+            datasrc = datasrc.concat(this.vwParts);
         }
 
         this.dataSource = new MatTableDataSource(datasrc);
@@ -85,9 +72,9 @@ export class PartListComponent implements OnInit {
                 (data: CarPart[]) => {
                     this.originalData = data;
 
-                    this.Bmwparts = data.filter(x => x.brand === 'BMW');
-                    this.AudiParts = data.filter(x => x.brand === 'Audi');
-                    this.VWparts = data.filter(x => x.brand === 'Volkswagen');
+                    this.bwmParts = data.filter(x => x.brand === BRAND.BMW);
+                    this.audiParts = data.filter(x => x.brand === BRAND.Audi);
+                    this.vwParts = data.filter(x => x.brand === BRAND.VW);
 
                     this.dataSource = new MatTableDataSource(data);
                     this.dataSource.sort = this.sort;
@@ -97,18 +84,27 @@ export class PartListComponent implements OnInit {
     }
 
     addToCart(item) {
-        const priorPurchase = this.cart.filter(e => e.Name === item.id);
+        const priorPurchase = this.dataService.getItems().filter(e => e.item.id === item.id);
 
-        /* Strong assumption that there is at least one item for sale */
+        if (priorPurchase.length > 1) {
+            console.error('Something is terribly wrong: duplicates in the cart');
+            return;
+        }
+
+        /* Assuming that, if it is in the list, there is at least one item for sale */
         if (priorPurchase.length === 0) {
-            this.cart.push({ id: item.id, amount: 1 });
+            this.dataService.addItem({ item, amount: 1 });
         }
         /* Strong assumption that there is only one element */
-        else if (priorPurchase.length === 1 && priorPurchase[0].amount < item.amount) {
-            priorPurchase[0].amount++;
+        else if (priorPurchase.length === 1 ) {
+            if (priorPurchase[0].amount < item.amount) {
+                priorPurchase[0].amount++;
+            } else {
+                console.log('SOLD OUT! No more parts to buy');
+            }
         }
 
-        this.partHttpService.sendCartItems(this.cart);
+        // this.partHttpService.sendCartItems(this.cart);
     }
 
 

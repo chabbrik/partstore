@@ -1,12 +1,5 @@
 import { Component } from '@angular/core';
-
-export interface CartItem {
-  name: String;
-  amount: number;
-  cost: number;
-  brand: String;
-  year: String;
-}
+import { CartItem, CartService} from '../services/data.service';
 
 @Component({
   selector: 'app-cart',
@@ -14,42 +7,22 @@ export interface CartItem {
   styleUrls: ['./cart.component.less']
 })
 export class CartComponent {
-  displayedColumns: string[] = ['name', 'amount', 'cost', 'brand', 'year'];
-  
-  transactions: CartItem[] = [
-    {
-      name: 'ngine',
-      amount: 1,
-      cost: 1000,
-      brand: 'BMW',
-      year: '2003'
-  },
-  {
-      name: 'Wheel',
-      amount: 4,
-      cost: 50,
-      brand: 'Audi',
-      year: '2003'
-  },
-  {
-      name: 'gearbox',
-      amount: 1,
-      cost: 255,
-      brand: 'VW',
-      year: '2003'
-  },
-  {
-      name: 'Brakes',
-      amount: 2,
-      cost: 150,
-      brand: 'BMW',
-      year: '2003'
-  }
-]
-    
+  displayedColumns: string[] = ['name', 'amount', 'finalPrice', 'brand', 'year'];
 
-  /** Gets the total cost of all transactions. */
+  transactions: CartItem[];
+  private totalPrice: number;
+  private discount: number;
+
+  constructor(private cartService: CartService) {
+    this.transactions = cartService.getItems();
+  }
+
   getTotalCost() {
-    return this.transactions.map(t => t.cost).reduce((acc, value) => acc + value, 0);
+    this.totalPrice =  this.transactions
+        .map(t => t.item.finalPrice * t.amount)
+        .reduce((acc, value) => acc + value, 0);
+    this.discount = this.cartService.getBestDiscount();
+
+    return this.totalPrice - this.discount;
   }
 }
