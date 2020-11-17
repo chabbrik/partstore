@@ -2,6 +2,7 @@ package lt.lietpastas.partstore.dataloaders;
 
 import lt.lietpastas.partstore.entities.CountDTO;
 import lt.lietpastas.partstore.entities.PriceDTO;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -10,14 +11,19 @@ import java.math.BigDecimal;
 
 @Service
 public class HttpDataLoader {
-    String PROVIDER_URL = "http://localhost:8085";
     String PRICE_URL = "/item/price/";
     String ITEM_URL = "/item/count/";
 
     private final WebClient client;
 
-    public HttpDataLoader() {
-        client = WebClient.create(PROVIDER_URL);
+    public HttpDataLoader(Environment environment) {
+        String url = environment.getProperty("provider.url");
+
+        if (url == null) {
+            throw new IllegalArgumentException("No Provider URL loaded");
+        }
+
+        client = WebClient.create(url);
     }
 
     public BigDecimal getLatestPrice(String itemId) {
