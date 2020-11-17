@@ -1,6 +1,9 @@
-package lt.lietpastas.partstore.dblayer;
+package lt.lietpastas.partstore.schedulers;
 
 import lt.lietpastas.partstore.businesslayer.MarginCalculator;
+import lt.lietpastas.partstore.dataloaders.HttpDataLoader;
+import lt.lietpastas.partstore.entities.CarPartDTO;
+import lt.lietpastas.partstore.persistence.HibernateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -12,22 +15,25 @@ import java.util.List;
 public class ScheduledUpdates {
 
     @Autowired
-    private StoreDatabaseService storeDatabaseService;
+    private MarginCalculator marginCalculator;
 
     @Autowired
-    private MarginCalculator marginCalculator;
+    private HibernateUtil dbUtil;
+
+    @Autowired
+    private HttpDataLoader httpDataLoader;
 
     @Scheduled(cron = "0 0 1/4 ? * *")
     public void updateProductDatabase() {
-        List<CarPartDTO> results  = storeDatabaseService.getInventoryList();
+        List<CarPartDTO> results  = dbUtil.getInventoryList();
         for (CarPartDTO part : results) {
-            part.setAmount(storeDatabaseService.getLatestCount(part.getAmountItemCode()));
+            part.setAmount(httpDataLoader.getLatestCount(part.getAmountItemCode()));
 
-            BigDecimal newPrice = (storeDatabaseService.getLatestPrice(part.getItemCode()));
+            BigDecimal newPrice = httpDataLoader.getLatestPrice(part.getItemCode());
             part.setPrice(newPrice);
             part.setFinalPrice(marginCalculator.calculateFinalPrice(part.getBrand(), newPrice));
 
-            storeDatabaseService.save(part);
+            dbUtil.save(part);
         }
 
     }

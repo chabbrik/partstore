@@ -1,4 +1,4 @@
-package lt.lietpastas.partstore.dblayer;
+package lt.lietpastas.partstore.entities;
 
 import com.opencsv.bean.CsvBindByName;
 

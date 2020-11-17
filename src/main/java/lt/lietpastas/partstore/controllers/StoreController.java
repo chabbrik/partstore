@@ -1,13 +1,11 @@
-package lt.lietpastas.partstore;
+package lt.lietpastas.partstore.controllers;
 
-import lt.lietpastas.partstore.businesslayer.MarginCalculator;
-import lt.lietpastas.partstore.dblayer.CarPartDTO;
-import lt.lietpastas.partstore.dblayer.StoreDatabaseService;
+import lt.lietpastas.partstore.persistence.HibernateUtil;
+import lt.lietpastas.partstore.entities.CarPartDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,14 +14,11 @@ import java.util.stream.Collectors;
 public class StoreController {
 
     @Autowired
-    private StoreDatabaseService storeDatabaseService;
-
-    @Autowired
-    private MarginCalculator marginCalculator;
+    private HibernateUtil dbUtil;
 
     @GetMapping("/list")
     public List<CarPartDTO> getPartList() {
-        List<CarPartDTO> results  = storeDatabaseService.getInventoryList()
+        List<CarPartDTO> results  = dbUtil.getInventoryList()
                 .stream()
                 .filter(x -> x.getAmount().compareTo(BigDecimal.ZERO) > 0)
                 .collect(Collectors.toList());
@@ -31,14 +26,8 @@ public class StoreController {
         return results;
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(path = "cart/updatecart", consumes = "application/json", produces = "application/json")
-    public String addToCart(@RequestBody CartModel cartModel) {
-        List<CarPartDTO> cartItems = storeDatabaseService.getCartObjects(cartModel);
-
-
+    public String addToCart() {
         return "Success";
     }
-
-
 }
