@@ -11,7 +11,7 @@ import { CartService } from './services/data.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,7 +26,7 @@ import { MatButtonModule } from '@angular/material/button';
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
-        NoopAnimationsModule,
+        BrowserAnimationsModule,
         MatTableModule,
         MatSortModule,
         MatFormFieldModule,

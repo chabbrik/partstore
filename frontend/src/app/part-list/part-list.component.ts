@@ -4,23 +4,27 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CarPart, CartService } from '../services/data.service';
 import { BRAND } from '../constants/car.brands';
+import { COLUMNS } from '../constants/column.names';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
     selector: 'app-part-list',
     templateUrl: './part-list.component.html',
-    styleUrls: ['./part-list.component.less']
+    styleUrls: ['./part-list.component.less'],
+    animations: [
+        trigger('detailExpand', [
+            state('collapsed', style({height: '0px', minHeight: '0'})),
+            state('expanded', style({height: '*'})),
+            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+        ]),
+    ],
 })
 
 export class PartListComponent implements OnInit {
-    displayedColumns: string[] = ['name', 'brand', 'year', 'finalPrice', 'amount', 'buyButton'];
-    title = {
-        name: 'Pavadinimas',
-        brand: 'Markė',
-        year: 'Metai',
-        finalPrice: 'Kaina',
-        amount: 'Kiekis',
-        buyButton: 'Pirkti'
-    };
+    displayedColumns: string[] = ['name', 'brand', 'year', 'finalPrice', 'amount', 'select'];
+    dataColumns: string[] = ['name', 'brand', 'year', 'finalPrice', 'amount'];
+    langStrings = COLUMNS;
+    title = COLUMNS.title;
 
     dataSource: MatTableDataSource<CarPart>;
     originalData;
