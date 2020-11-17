@@ -13,8 +13,8 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
     styleUrls: ['./part-list.component.less'],
     animations: [
         trigger('detailExpand', [
-            state('collapsed', style({height: '0px', minHeight: '0'})),
-            state('expanded', style({height: '*'})),
+            state('collapsed', style({display: 'none'})),
+            state('expanded', style({display: 'block'})),
             transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
         ]),
     ],
@@ -25,6 +25,7 @@ export class PartListComponent implements OnInit {
     dataColumns: string[] = ['name', 'brand', 'year', 'finalPrice', 'amount'];
     langStrings = COLUMNS;
     title = COLUMNS.title;
+    expandedElement: CarPart | null;
 
     dataSource: MatTableDataSource<CarPart>;
     originalData;
@@ -48,6 +49,7 @@ export class PartListComponent implements OnInit {
 
     ngOnInit() {
         this.getPartList();
+        this.expandedElement = null;
     }
 
     toggle(brand: string) {
