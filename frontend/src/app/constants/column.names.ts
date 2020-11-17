@@ -5,9 +5,15 @@ export const COLUMNS = {
         year: 'Metai',
         finalPrice: 'Kaina',
         amount: 'Kiekis',
-        buyButton: 'Pirkti'
+        power: 'Galingumas',
+        engineVolume: 'Variklio tūris',
+        gearbox: 'Pavaros tipas',
+        fuelType: 'Kūras',
+        supplier: 'Tiekėjas',
+        supplierAddress: 'Tiekėjo adresas'
     },
 
-    buy: 'Pirkti'
+    buy: 'Pirkti',
+    search: 'Paieška'
 };
 
