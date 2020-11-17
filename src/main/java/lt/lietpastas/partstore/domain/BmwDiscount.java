@@ -8,16 +8,10 @@ import java.util.List;
 import static lt.lietpastas.partstore.constants.Constants.BMW;
 import static lt.lietpastas.partstore.constants.Constants.BMW_DISCOUNT;
 
-public class BmwDiscount implements Discount{
+public class BmwDiscount extends Discount{
 
     @Override
     public BigDecimal calculateDiscount(List<CarPartDTO> cartItems) {
-        return cartItems
-                .stream()
-                .filter(x -> x.getBrand().equals(BMW))
-                .map(x -> x.getFinalPrice()
-                        .multiply(BMW_DISCOUNT
-                                .multiply(x.getAmount())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return calculateBrandTotalValue(cartItems, BMW, BMW_DISCOUNT);
     }
 }
