@@ -1,6 +1,6 @@
 package lt.lietpastas.partstore.dataloaders;
 
-import lt.lietpastas.partstore.businesslayer.MarginCalculator;
+import lt.lietpastas.partstore.domain.MarginCalculator;
 import lt.lietpastas.partstore.entities.CarPartDTO;
 import lt.lietpastas.partstore.persistence.HibernateUtil;
 import org.springframework.beans.factory.annotation.Autowired;

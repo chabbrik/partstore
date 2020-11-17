@@ -1,6 +1,6 @@
 package lt.lietpastas.partstore.schedulers;
 
-import lt.lietpastas.partstore.businesslayer.MarginCalculator;
+import lt.lietpastas.partstore.domain.MarginCalculator;
 import lt.lietpastas.partstore.dataloaders.HttpDataLoader;
 import lt.lietpastas.partstore.entities.CarPartDTO;
 import lt.lietpastas.partstore.persistence.HibernateUtil;

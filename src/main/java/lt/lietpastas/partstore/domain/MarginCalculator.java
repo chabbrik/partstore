@@ -1,4 +1,4 @@
-package lt.lietpastas.partstore.businesslayer;
+package lt.lietpastas.partstore.domain;
 
 import org.springframework.stereotype.Service;
 
