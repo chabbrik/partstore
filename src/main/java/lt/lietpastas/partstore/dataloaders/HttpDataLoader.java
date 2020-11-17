@@ -2,6 +2,8 @@ package lt.lietpastas.partstore.dataloaders;
 
 import lt.lietpastas.partstore.entities.CountDTO;
 import lt.lietpastas.partstore.entities.PriceDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,8 @@ import java.math.BigDecimal;
 
 @Service
 public class HttpDataLoader {
+    Logger logger = LoggerFactory.getLogger(HttpDataLoader.class);
+
     String PRICE_URL = "/item/price/";
     String ITEM_URL = "/item/count/";
 
@@ -35,11 +39,11 @@ public class HttpDataLoader {
                     .retrieve()
                     .bodyToMono(PriceDTO.class)
                     .block();
-            System.out.println(PRICE_URL + itemId + " = " + result.getValue());
+            logger.debug(PRICE_URL + itemId + " = " + result.getValue());
 
             return result.getMonetaryValue();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return new BigDecimal(0);
     }
@@ -52,10 +56,10 @@ public class HttpDataLoader {
                     .retrieve()
                     .bodyToMono(CountDTO.class)
                     .block();
-            System.out.println(ITEM_URL + itemId + " = " + result.getValue());
+            logger.debug(ITEM_URL + itemId + " = " + result.getValue());
             return result.getValue();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return BigDecimal.ZERO;
     }

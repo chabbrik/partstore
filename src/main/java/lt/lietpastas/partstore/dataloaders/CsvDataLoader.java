@@ -2,6 +2,8 @@ package lt.lietpastas.partstore.dataloaders;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 import lt.lietpastas.partstore.entities.CarPartDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Service
 public class CsvDataLoader {
+    Logger logger = LoggerFactory.getLogger(CsvDataLoader.class);
+
     String datasource;
     public CsvDataLoader(Environment environment) {
         datasource = environment.getProperty("csv.datasource");
@@ -32,7 +36,7 @@ public class CsvDataLoader {
                     .withType(CarPartDTO.class).build().parse();
             return beans;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             return Collections.EMPTY_LIST;
         }
     }
